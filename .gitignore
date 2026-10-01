@@ -19,6 +19,8 @@ dist/
 dist/
 *.log
 
+# Uploaded files
+storage/
 
 # Environment variables
 .env

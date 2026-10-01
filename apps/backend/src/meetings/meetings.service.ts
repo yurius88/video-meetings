@@ -29,6 +29,10 @@ export class MeetingsService {
       .slice(0, limit);
   }
 
+  findById(id: string): Meeting | undefined {
+    return this.meetings.find((m) => m.id === id);
+  }
+
   findOne(id: string, userId: string): Meeting {
     const meeting = this.meetings.find((m) => m.id === id && m.createdBy === userId);
 
