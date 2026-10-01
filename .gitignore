@@ -20,7 +20,8 @@ dist/
 *.log
 
 # Uploaded files
-storage/
+/apps/backend/storage/
+/storage/
 
 # Environment variables
 .env

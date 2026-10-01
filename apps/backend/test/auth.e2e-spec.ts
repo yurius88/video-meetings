@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
 
@@ -58,6 +59,23 @@ describe('Auth (e2e)', () => {
           expect(res.body).toHaveProperty('message');
           expect(res.body.message).toContain('already exists');
         });
+    });
+
+    it('should fail to register the same email in a different case', async () => {
+      await request(app.getHttpServer())
+        .post('/auth/register')
+        .send({ email: 'case@example.com', password: 'Password123!' })
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .post('/auth/register')
+        .send({ email: 'CASE@Example.com', password: 'Password123!' })
+        .expect(409);
+
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ email: 'Case@Example.COM', password: 'Password123!' })
+        .expect(200);
     });
 
     it('should fail to register without email', () => {
@@ -205,6 +223,17 @@ describe('Auth (e2e)', () => {
       });
 
       accessToken = response.body.access_token;
+    });
+
+    it('should reject a token signed with the old hard-coded secret', () => {
+      const forged = new JwtService({ secret: 'your-secret-key' }).sign({
+        sub: 'forged',
+        email: 'jwttest@example.com',
+      });
+      return request(app.getHttpServer())
+        .get('/auth/profile')
+        .set('Authorization', `Bearer ${forged}`)
+        .expect(401);
     });
 
     it('should access protected route with valid token', () => {
