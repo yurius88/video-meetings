@@ -62,6 +62,15 @@ npm run test:e2e --workspace=apps/backend          # E2E-тесты
 npm run test:debug --workspace=apps/backend        # Debug-режим
 ```
 
+### Тестирование (Frontend — Playwright E2E)
+```bash
+npm run test:e2e --workspace=apps/frontend          # Все e2e-тесты (chromium/firefox/webkit)
+npm run test:e2e:ui --workspace=apps/frontend       # Интерактивный UI-режим Playwright
+npm run test:e2e:debug --workspace=apps/frontend    # Debug-режим (пошаговая отладка)
+npm run test:e2e:report --workspace=apps/frontend   # Отчёт HTML о последнем прогоне
+```
+Конфигурация: `apps/frontend/playwright.config.ts`, тесты в `apps/frontend/e2e/`. Требуется запущенный backend (порт 3001) — Playwright сам поднимает frontend dev-сервер (порт 3000).
+
 ## Working with Workspaces
 
 При работе с конкретным приложением используй флаг `--workspace`:
@@ -102,3 +111,7 @@ npm run <script> --workspace=apps/backend
 - Новое приложение в `apps/` — создай для него отдельный `CLAUDE.md` по аналогии с существующими и добавь ссылку/описание в этот файл.
 
 Документация должна отражать текущее состояние кода, а не историю изменений — при обновлении архитектуры правь описание, а не дополняй его пометками вида "теперь используется X вместо Y".
+
+
+## File upload
+Используй файл ресерча для этого: @docs/research-meeting-upload.md

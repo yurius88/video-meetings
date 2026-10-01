@@ -25,6 +25,12 @@
       "skillPath": "skills/requesting-code-review/SKILL.md",
       "computedHash": "2abaeac1de432c76abda0ca7ba618901d2e94f8817b3650f9c523acea2d224f5"
     },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "eb75bf6085080d7d31fa2c0f9fd98d49abd229356147999b09177b733276f806"
+    },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",

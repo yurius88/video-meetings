@@ -35,9 +35,11 @@ npx jest --config ./test/jest-e2e.json test/app.e2e-spec.ts
 ## Architecture
 
 - **Модульная структура NestJS** — точка входа `src/main.ts` создаёт приложение через `NestFactory.create(AppModule)` и включает CORS.
-- **Корневой модуль** — `src/app.module.ts` регистрирует контроллеры и провайдеры. Новые фичи оформляются как отдельные модули (`imports: []`) по стандартному паттерну NestJS (Controller → Service → Module).
-- **Контроллер/сервис** — `app.controller.ts` делегирует логику в `app.service.ts` через dependency injection (стандартный паттерн NestJS).
-- **Тесты** — unit-тесты (`*.spec.ts`) лежат рядом с исходным кодом в `src/`, конфигурация в `package.json` (`jest` секция, `rootDir: "src"`). E2E-тесты — в `test/`, со своим конфигом `test/jest-e2e.json`.
+- **Корневой модуль** — `src/app.module.ts` регистрирует `UsersModule`, `AuthModule`, `MeetingsModule`. Новые фичи оформляются как отдельные модули (`imports: []`) по стандартному паттерну NestJS (Controller → Service → Module).
+- **CQRS** — используется пакет `@nestjs/cqrs` (`CqrsModule`). Команды и запросы определяются как классы и обрабатываются соответствующими `CommandHandler`/`QueryHandler`. Шины `CommandBus`/`QueryBus` являются единственной точкой взаимодействия между модулями.
+- **Авторизация (`AuthModule`)** — контроллер `AuthController` получает входные DTO, диспатчит `RegisterCommand`/`LoginCommand` через `CommandBus`, генерирует JWT через `JwtService`. Валидация JWT — `JwtStrategy` + `JwtAuthGuard`. Для доступа к пользователям `AuthModule` импортирует `UsersModule`; сам `UsersService` в хендлеры auth не инжектится — поиск происходит через `QueryBus` (`GetUserByEmailQuery`), создание — через `CommandBus` (`CreateUserCommand`).
+- **Пользователи (`UsersModule`)** — единственный владелец `UsersService` (in-memory массив). Его публичное API — `CreateUserCommand`/`CreateUserHandler` (проверяет дубль email, хеширует пароль) и `GetUserByEmailQuery`/`GetUserByEmailHandler`. Экспортирует `UsersService` для `AuthModule`, зарегистрирован в `AppModule`.
+- **Встречи (`MeetingsModule`)** — CRUD-lite: `POST /meetings`, `GET /meetings`, `GET /meetings/recent?limit=3`, `GET /meetings/:id`; хранение в памяти; роут `recent` объявлен до `:id` чтобы не попасть в параметр.
 
 ## Key Files
 

@@ -15,6 +15,8 @@
     "build": "npm run build:frontend && npm run build:backend",
     "lint": "npm run lint --workspaces",
     "format": "prettier --write \"apps/**/*.{ts,tsx,js,jsx,json,md}\"",
+    "test:e2e": "npm run test:e2e --workspace=apps/frontend",
+    "test:e2e:ui": "npm run test:e2e:ui --workspace=apps/frontend",
     "prepare": "husky"
   },
   "devDependencies": {
