@@ -5,6 +5,9 @@ node_modules/
 
 # Testing
 coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
 
 # Next.js
 .next/
@@ -15,6 +18,10 @@ dist/
 # NestJS
 dist/
 *.log
+
+# Uploaded files
+/apps/backend/storage/
+/storage/
 
 # Environment variables
 .env
